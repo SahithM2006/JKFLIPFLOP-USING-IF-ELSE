@@ -42,8 +42,37 @@ The maximum possible groupings of adjacent ones are already shown in the figure.
 ```
 **PROGRAM**
 Developed by: SAHITH M
-RegisterNumber: 24000251
 
+RegisterNumber: 24000251
+```
+module jk_flipflop (
+    input wire clk,   // Clock signal
+    input wire j,     // J input
+    input wire k,     // K input
+    input wire reset, // Asynchronous reset
+    output reg q,     // Q output
+    output wire q_bar // Complement of Q
+);
+
+    // Complement of Q
+    assign q_bar = ~q;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            q <= 1'b0; // Reset Q to 0
+        end else begin
+            case ({j, k})
+                2'b00: q <= q;          // No change
+                2'b01: q <= 1'b0;       // Reset
+                2'b10: q <= 1'b1;       // Set
+                2'b11: q <= ~q;         // Toggle
+                default: q <= q;        // Default case (redundant)
+            endcase
+        end
+    end
+
+endmodule
+```
 **RTL LOGIC FOR FLIPFLOPS**
 
 ![JK](https://github.com/user-attachments/assets/713dbf07-184f-400a-8e8e-305089faee98)
